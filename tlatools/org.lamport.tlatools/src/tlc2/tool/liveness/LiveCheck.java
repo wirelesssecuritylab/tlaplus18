@@ -785,7 +785,7 @@ public class LiveCheck implements ILiveCheck {
 							EC.TLC_INVARIANT_VIOLATED_BEHAVIOR);
 				}
 				
-				tool.checkPostConditionWithCounterExample(new CounterExample(states));
+				tool.checkPostConditionWithCounterExample(new CounterExample(states,"default"));
 				
 				errorGraphNode = null;
 				throw new InvariantViolatedException();

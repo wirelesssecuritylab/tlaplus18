@@ -173,7 +173,7 @@ public class SimulationWorker extends IdThread implements INextStateFunctor {
 			if (exception instanceof LiveCounterExampleException) {
 				return ((LiveCounterExampleException) exception).counterExample;
 			}
-			return new CounterExample(getTrace());
+			return new CounterExample(getTrace(),"default");
 		}
 	}
 	

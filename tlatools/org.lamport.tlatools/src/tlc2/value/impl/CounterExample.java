@@ -39,13 +39,16 @@ public class CounterExample extends RecordValue {
 
 	private static final UniqueString STATES = UniqueString.of("state");
 	private static final UniqueString ACTIONS = UniqueString.of("action");
+	private static final UniqueString INVARIANT = UniqueString.of("invariant");
+	private static String invariantParams = "default";
 
 	public CounterExample() {
 		this(new ArrayList<>(0), Action.UNKNOWN, 0);
 	}
 
-	public CounterExample(final List<TLCStateInfo> trace) {
+	public CounterExample(final List<TLCStateInfo> trace,String params) {
 		this(trace, Action.UNKNOWN, 0);
+		this.invariantParams = params;
 	}
 
 	public CounterExample(final List<TLCStateInfo> trace, final int loopOrdinal) {
@@ -58,13 +61,14 @@ public class CounterExample extends RecordValue {
 	// when there can be many counterexamples.
 	// TODO Include name of definition of the violated property.
 	public CounterExample(final List<TLCStateInfo> trace, final Action action, final int loopOrdinal) {
-		super(new UniqueString[] { ACTIONS, STATES }, new Value[2], false);
+		super(new UniqueString[] { ACTIONS, STATES, INVARIANT }, new Value[3], false);
 
 		final int loopIdx = loopOrdinal - 1;
 		assert loopIdx < trace.size();
 
 		final LinkedList<Value> states = new LinkedList<>();
 		final List<Value> actions = new ArrayList<>();
+		final List<Value> parList = new ArrayList<>();
 
 		// A sequence of distinct states...
 		for (int i = 0; i < trace.size(); i++) {
@@ -86,9 +90,10 @@ public class CounterExample extends RecordValue {
 			final TupleValue edge = new TupleValue(new Value[] { last, new RecordValue(action), back });
 			actions.add(edge);
 		}
-
+        parList.add(new StringValue(invariantParams));
 		this.values[0] = new SetEnumValue(actions.toArray(Value[]::new), false);
 		this.values[1] = new SetEnumValue(states.toArray(Value[]::new), false);
+		this.values[2] = new SetEnumValue(parList.toArray(Value[]::new), false);
 	}
 	public CounterExample(TLCState initialState) {
 		this(Arrays.asList(new TLCStateInfo[] { new TLCStateInfo(initialState) }), Action.UNKNOWN, 0);

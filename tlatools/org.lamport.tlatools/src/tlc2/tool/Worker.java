@@ -617,7 +617,7 @@ public final class Worker extends IdThread implements IWorker, INextStateFunctor
 			final boolean doNextSetErr = this.tlc.doNextSetErr(curState, succState, keep, ec, param);
 
 			// Invoke PostCondition
-			doPostCondition(curState, succState);
+			doPostCondition(curState, succState,param);
 			
 			return doNextSetErr;
 		}
@@ -628,13 +628,13 @@ public final class Worker extends IdThread implements IWorker, INextStateFunctor
 			final boolean doNextSetErr = this.tlc.doNextSetErr(curState, succState, action);
 
 			// Invoke PostCondition
-			doPostCondition(curState, succState);
+			doPostCondition(curState, succState,"default");
 
 			return doNextSetErr;
 		}
 	}
 	
-	private final void doPostCondition(TLCState curState, TLCState succState) throws IOException {
+	private final void doPostCondition(TLCState curState, TLCState succState, String params) throws IOException {
 		final LinkedList<TLCStateInfo> trace = new LinkedList<>();
 		if (curState.isInitial() && succState == null) {
 			// Prevents calling tool.getState(initial, initial) in the next else-if branch.
@@ -661,6 +661,6 @@ public final class Worker extends IdThread implements IWorker, INextStateFunctor
                 trace.set(i, alias);
         }
         
-        tool.checkPostConditionWithCounterExample(new CounterExample(trace));
+        tool.checkPostConditionWithCounterExample(new CounterExample(trace,params));
 	}
 }
