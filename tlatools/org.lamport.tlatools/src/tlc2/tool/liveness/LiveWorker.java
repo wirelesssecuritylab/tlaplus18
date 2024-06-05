@@ -990,7 +990,7 @@ public class LiveWorker implements Callable<Boolean> {
 			StatePrinter.printBackToState(sinfo, stateNumber);
 		}
 		
-		tool.getDebugger().checkPostConditionWithCounterExample(new CounterExample(states, sinfo.getAction(), stateNumber));
+		tool.getDebugger().checkPostConditionWithCounterExample(new CounterExample(states, sinfo.getAction(), stateNumber,"default"));
 	}
 
 	// BFS search

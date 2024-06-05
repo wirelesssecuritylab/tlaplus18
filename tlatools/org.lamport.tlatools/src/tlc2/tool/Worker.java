@@ -628,6 +628,7 @@ public final class Worker extends IdThread implements IWorker, INextStateFunctor
 			final boolean doNextSetErr = this.tlc.doNextSetErr(curState, succState, action);
 
 			// Invoke PostCondition
+			System.out.println("=======1==========");
 			doPostCondition(curState, succState,"default");
 
 			return doNextSetErr;

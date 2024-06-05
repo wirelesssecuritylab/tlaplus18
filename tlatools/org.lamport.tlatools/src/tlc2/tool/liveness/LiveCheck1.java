@@ -689,7 +689,7 @@ public class LiveCheck1 implements ILiveCheck {
 		}
 		if (node.stateFP == lastState.fingerPrint()) {
 			StatePrinter.printStutteringState(stateNum);
-			return new CounterExample(trace, stateNum);
+			return new CounterExample(trace, stateNum,"default");
 		} else {
 			sinfo = myTool.getState(cycleState.fingerPrint(), sinfo);
 			// The print stmts below claim there is a cycle, thus assert that
@@ -697,7 +697,7 @@ public class LiveCheck1 implements ILiveCheck {
 			// reduced by one because cyclePos is human-readable.
 			assert cycleState.equals(sinfo.state);
 			StatePrinter.printBackToState(sinfo, cyclePos);
-			return new CounterExample(trace, sinfo.getAction(), cyclePos);
+			return new CounterExample(trace, sinfo.getAction(), cyclePos,"default");
 		}
 	}
 

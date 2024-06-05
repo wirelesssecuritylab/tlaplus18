@@ -237,26 +237,18 @@ public class Json {
    */
   @TLAPlusOperator(identifier = "JsonSerialize", module = "Json", warn = false)
   public synchronized static BoolValue serialize(final StringValue path, final Value v) throws IOException {
-  System.out.println("-----serialize1-------");
-  System.out.println(path);
-  System.out.println(v.toString());
-
 	Value value = v.toTuple();
 	if (value == null) {
 		value = v.toRcd();
 	}
-  System.out.println("-----serialize2-------");
 	if (value == null) {
 		throw new EvalException(EC.TLC_MODULE_ARGUMENT_ERROR,
 				new String[] { "second", "JsonSerialize", "sequence or record", Values.ppr(v.toString()) });
 	}
-		System.out.println("-----serialize3-------");
     final File file = new File(path.val.toString());
     if (file.getParentFile() != null) {file.getParentFile().mkdirs();} // Cannot create parent dir for relative path.
-    System.out.println("-----serialize4-------");
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(path.val.toString())))) {
     	writer.write(getNode(v).toString());
-      System.out.println(getNode(v).toString());
     }
     return BoolValue.ValTrue;
   }

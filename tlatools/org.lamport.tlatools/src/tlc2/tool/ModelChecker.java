@@ -150,8 +150,9 @@ public class ModelChecker extends AbstractChecker
                 if (result != EC.NO_ERROR)
                 {
                     report("exiting, because init failed");
+                    String invariant_ = this.getInitInvariationVoliate();
                     if (this.errState != null) {
-                        tool.checkPostConditionWithCounterExample(new CounterExample(errState));
+                        tool.checkPostConditionWithCounterExample(new CounterExample(errState,invariant_));
                     } else {
                         tool.checkPostCondition();
                     }
@@ -325,7 +326,27 @@ public class ModelChecker extends AbstractChecker
 
 		return result;
     }
-
+    private String getInitInvariationVoliate() {
+		String result = "default";
+		final StateVec inits = this.tool.getInitStates();
+		final StateVec initStates = new StateVec(inits.size());
+		Action[] invariants = this.tool.getInvariants();
+		TLCState curState = null;
+		for (int i = 0; i < inits.size(); i++) {
+			curState = inits.elementAt(i);
+			if (this.tool.isGoodState(curState)) {
+				for (int j = 0; j < invariants.length; j++) {
+					if (!this.tool.isValid(invariants[j], curState)) {
+						// We get here because of invariant violation.
+						result = this.tool.getInvNames()[j];
+						break;
+						
+					}
+				}
+			} 
+		}
+		return result;
+	}
     /** 
      * Check the assumptions.  
      */
